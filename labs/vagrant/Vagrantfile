@@ -1,0 +1,58 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box_check_update = false
+  config.ssh.insert_key = false
+
+  # Trex VM
+  config.vm.define "trex", primary: true do |trex|
+      trex.vm.box = "opensuse/openSUSE-Tumbleweed-Vagrant.x86_64"
+
+      trex.vm.network "private_network", ip: "192.168.50.4",
+          virtualbox__intnet: "net1", mac: "080027112201"
+      trex.vm.network "private_network", ip: "192.168.60.4",
+          virtualbox__intnet: "net2", mac: "080027112202"
+      # Forward Trex Ports
+      trex.vm.network "forwarded_port", guest: 4500, host: 4500
+      trex.vm.network "forwarded_port", guest: 4501, host: 4501
+
+      trex.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+        vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+        vb.memory = "2048"
+        vb.cpus = 4
+      end
+
+      trex.vm.provision "shell", inline: <<-SHELL
+         VERSION="v2.61"
+         zypper ref
+         zypper -n install tcpdump python-pip screen
+         wget --no-cache http://trex-tgn.cisco.com/trex/release/${VERSION}.tar.gz
+         tar xvzf ${VERSION}.tar.gz
+         mv ${VERSION} /opt/trex
+         cd /opt/trex
+         tar xvzf trex_client_${VERSION}.tar.gz
+         ./dpdk_setup_ports.py -c enp0s8 enp0s9 -o /etc/trex_cfg.yaml --dest-macs 08:00:27:44:55:01 08:00:27:44:55:02 --force-macs
+         screen -d -s trex "cd /opt/trex/; sudo ./t-rex-64 -i"
+      SHELL
+   end
+
+  # DUT VM
+  config.vm.define "dut" do |dut|
+      dut.vm.box = "opensuse/openSUSE-Tumbleweed-Vagrant.x86_64"
+      dut.vm.network "private_network", ip: "192.168.50.5",
+          virtualbox__intnet: "net1", mac: "080027445501"
+      dut.vm.network "private_network", ip: "192.168.60.5",
+          virtualbox__intnet: "net2", mac: "080027445502"
+
+      dut.vm.provider "virtualbox" do |vb|
+        vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+        vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+        vb.memory = "2048"
+        vb.cpus = 4
+      end
+
+   end
+
+end
