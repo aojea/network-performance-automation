@@ -7,6 +7,19 @@ Obtain kernel image
 
 https://download.opensuse.org/repositories/Kernel:/
 
+ 1050  wget
+ https://download.opensuse.org/repositories/Kernel:/HEAD/standard/x86_64/kernel-kvmsmall-5.3.rc8-2.1.gd6f0b71.x86_64.rpm
+  1051  rpm2cpio kernel-kvmsmall-5.3.rc8-2.1.gd6f0b71.x86_64.rpm | cpio -id
+   1052  cd boot/
+    1053  s
+     1054  ls
+      1055  ls -altrh
+       1056  file vmlinux-5.3.0-rc8-2.gd6f0b71-kvmsmall.gz
+        1057  gunzip vmlinux-5.3.0-rc8-2.gd6f0b71-kvmsmall.gz
+         1058  ls
+          1059  file vmlinux-5.3.0-rc8-2.gd6f0b71-kvmsmall
+           1060  mv vmlinux-5.3.0-rc8-2.gd6f0b71-kvmsmall vmlinux
+
 
 https://github.com/firecracker-microvm/firecracker/blob/master/docs/rootfs-and-kernel-setup.md
 
