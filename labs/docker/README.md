@@ -10,6 +10,8 @@ Launch trex
 
 docker run -it --rm --privileged --cap-add=ALL -v /mnt/huge:/mnt/huge -v /sys/bus/pci/devices:/sys/bus/pci/devices -v /sys/devices/system/node:/sys/devices/system/node -v /dev:/dev aojea/trex
 
+(optional) –net=host to use the host network
+
 Create veth pair
 
  ip link add veth0 type veth peer name veth1
