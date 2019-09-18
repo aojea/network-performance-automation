@@ -1,0 +1,19 @@
+kind: Cluster
+apiVersion: kind.sigs.k8s.io/v1alpha3
+networking:
+  apiServerAddress: "0.0.0.0"
+  apiServerPort: 26443
+# patch it further using a JSON 6902 patch
+kubeadmConfigPatchesJson6902:
+- group: kubeadm.k8s.io
+  version: v1beta2
+  kind: ClusterConfiguration
+  patch: |
+    - op: add
+      path: /apiServer/certSANs/-
+      value: marfak.suse.cz
+nodes:
+# the control plane node
+- role: control-plane
+- role: worker
+- role: worker

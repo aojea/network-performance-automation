@@ -1,5 +1,6 @@
 import pytest
 import yaml
+import stl_path
 from trex_stl_lib.api import *
 
 
@@ -21,10 +22,13 @@ def trex(request):
     server = request.config.yaml_cfg['trex']['server']
     my_ports = request.config.yaml_cfg['trex']['ports']
     c = STLClient(server=server)
-    # connect to server
-    c.connect()
-    # prepare our ports
-    c.reset(ports=my_ports)
+    try:
+        # connect to server
+        c.connect()
+        # prepare our ports
+        c.reset(ports=my_ports)
+    except STLError as e:
+        print(e)
 
     def tearDown():
         c.stop()

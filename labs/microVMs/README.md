@@ -37,4 +37,15 @@ firectl --kernel=hello-vmlinux.bin --root-drive=alpine.ext4
 --firecracker-binary=./firecracker --tap-device=tap0/aa:bb:11:22:33:44
 --tap-device=tap1/aa:bb:11:22:33:11
 
+Configure network insside the VM with trex networks and enabale forward
 
+sysctl net.ipv4.conf.all.forwarding=1
+sysctl net.ipv6.conf.all.forwarding=1
+
+ip link set eth0 up
+ip link set eth1 up
+ip addr add 1.1.1.1/24 dev eth0
+ip addr add 2.2.2.1/24 dev eth1
+
+ip route add 16.0.0.0/12 via 1.1.1.10
+ip route add 48.0.0.0/12 via 2.2.2.20

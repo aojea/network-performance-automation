@@ -1,5 +1,6 @@
 import pytest
 import time
+import stl_path
 from trex_stl_lib.api import *
 """
 An example on how to use TRex for functional tests
@@ -19,8 +20,8 @@ def test_one_packet(trex, protocol):
     trex.set_service_mode(ports=rx_port)
     # generate a simple UDP packet
     pkt = Ether() / IP()
-    pkt[IP].src = "192.168.50.4"
-    pkt[IP].dst = "192.168.60.4"
+    pkt[IP].src = "16.0.50.4"
+    pkt[IP].dst = "48.0.60.4"
     if protocol == "TCP":
         pkt = pkt / TCP()
     elif protocol == "UDP":
