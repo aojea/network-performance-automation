@@ -16,7 +16,7 @@ def pytest_configure(config):
         config.yaml_cfg = yaml.load(f.read())
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def trex(request):
     # verbose_level = LoggerApi.VERBOSE_HIGH
     server = request.config.yaml_cfg['trex']['server']
@@ -30,11 +30,9 @@ def trex(request):
     except STLError as e:
         print(e)
 
-    def tearDown():
-        c.stop()
-        c.remove_all_captures()
-        c.set_service_mode(enabled=False)
-        c.disconnect()
+    yield c
+    c.stop()
+    c.remove_all_captures()
+    c.set_service_mode(enabled=False)
+    c.disconnect()
 
-    request.addfinalizer(tearDown)
-    return c

@@ -4,11 +4,7 @@ import stl_path
 from trex_stl_lib.api import *
 """
 An example on how to use TRex for functional tests
-
-It can be used for various tasks and can replace simple Pagent/Scapy
-low rate tests
-
-TODO include the pyvcluster logic
+using the stateless API with service mode
 """
 
 
