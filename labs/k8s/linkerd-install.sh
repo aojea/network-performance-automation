@@ -29,35 +29,8 @@ case $OS in
 esac
 OS=$(echo $OS | tr [:upper:] [:lower:])
 
-tmp=$(mktemp -d /tmp/linkerd2.XXXXXX)
 filename="linkerd2-cli-${LINKERD2_VERSION}-${OS}"
 url="https://github.com/linkerd/linkerd2/releases/download/${LINKERD2_VERSION}/${filename}"
-(
-  cd "$tmp"
-
-  echo "Downloading ${filename}..."
-
-  SHA=$(curl -sL "${url}.sha256")
-  curl -LO "${url}"
-  echo ""
-  echo "Download complete!, validating checksum..."
-  checksum=$(openssl dgst -sha256 "${filename}" | cut -d' ' -f2)
-  if [ "$checksum" != "$SHA" ]; then
-    echo "Checksum validation failed." >&2
-    exit 1
-  fi
-  echo "Checksum valid."
-  echo ""
-)
-
-(
-  cd "$HOME"
-  mkdir -p ".linkerd2/bin"
-  mv "${tmp}/${filename}" ".linkerd2/bin/linkerd"
-  chmod +x ".linkerd2/bin/linkerd"
-)
-
-rm -r "$tmp"
 
 echo "Linkerd was successfully installed 🎉"
 echo ""

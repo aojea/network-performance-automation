@@ -1,0 +1,22 @@
+
+# Install trex
+
+# Prepare the DUT
+
+## Configure Interfaces
+
+## Create kubernetes cluster using Kind
+
+## Install route to the services subnet
+
+## Install linkerd
+
+## Install Microservices application
+
+# Prepare the trex traffic
+
+Modify the IP address of nginx.py
+
+Run the traffic generator
+
+Verify the traffic on the linkerd dashboard
